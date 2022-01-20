@@ -1,0 +1,103 @@
+<!-- <html>
+    <head>
+
+    </head>
+    <body> -->
+        <!-- <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+  import { getFirestore, doc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyB8bGPoh6hW52qqDaBxuDVywtTHbFK1GqE",
+    authDomain: "game-db0c1.firebaseapp.com",
+    projectId: "game-db0c1",
+    storageBucket: "game-db0c1.appspot.com",
+    messagingSenderId: "176181815519",
+    appId: "1:176181815519:web:4c5e9b6643c2a3d250216a",
+    measurementId: "G-NWR4Z93J03"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+const db = getFirestore(app);
+
+// Get a list of cities from your database
+async function getCities(db) {
+  const citiesCol = collection(db, 'cities');
+  const citySnapshot = await getDocs(citiesCol);
+  const cityList = citySnapshot.docs.map(doc => doc.data());
+  return cityList;
+}
+
+let cities = getCities(db);
+console.log(cities); -->
+
+        <!-- </script>
+        <canvas id="mycanvas" width="600" height="600">
+        </canvas>
+    </body>
+</html> -->
+
+
+
+<!-- Author: Lukasz Dworczynski -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Zombie Man</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <!-- Always include the game stylesheet, the Game class, the GameObject class and index.js -->
+        <!-- These four must be included in all games. This code never changes.                -->
+        <link href="Legacy/game.css" rel="stylesheet" type="text/css"/> 
+        <script src="Legacy/CanvasGame.js" type="text/javascript"></script>
+        <script src="Legacy/GameObject.js" type="text/javascript"></script>
+        <script src="Legacy/index.js" type="text/javascript"></script>
+        
+        <!-- ***************************************************************************** -->
+        <!-- *************** THE CODE BELOW CAN BE DIFFERENT FOR EACH GAME *************** -->
+        
+        <!-- Always include the game javascript that matches the html file name --> 
+        <script src="zombie_game.js" type="text/javascript"></script>
+        
+        <!-- Include any classes that extend from GameObject that are used in this game -->
+        <script src="ZombieCanvasGame.js" type="text/javascript"></script>
+        <script src="Character.js" type="text/javascript"></script>
+        <script src="Killer.js" type="text/javascript"></script>
+        <script src="Zombie.js" type="text/javascript"></script>
+        <script src="FireShellAnimation.js" type="text/javascript"></script>
+        <script src="Shell.js" type="text/javascript"></script>
+        <script src="Explosion.js" type="text/javascript"></script>
+        <script src="StaticImage.js" type="text/javascript"></script>
+        <script src="StaticText.js" type="text/javascript"></script>
+        <script src="Bullet.js" type="text/javascript"></script>
+        <script src="Score.js" type="text/javascript"></script>
+        <script src="Goldbar.js" type="text/javascript"></script>
+        <script src="HealthBar.js" type="text/javascript"></script>
+        
+        
+        <!-- ************************* END OF GAME SPECIFIC CODE ************************* -->
+        <!-- ***************************************************************************** -->
+    </head>
+
+    <body>
+        <div id="gameContainer"> <!-- having a container will allow us to have a game that includes elements that are outside of the canvas -->
+            <canvas id="gameCanvas" tabindex="1"></canvas>
+
+                    <!-- ***************************************************************************** -->
+            <!-- *************** THE CODE BELOW CAN BE DIFFERENT FOR EACH GAME *************** -->
+            <!-- ************************* END OF GAME SPECIFIC CODE ************************* -->
+            <!-- ***************************************************************************** -->
+            
+        </div>
+    </body>
+</html>
