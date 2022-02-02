@@ -1,9 +1,6 @@
 
 class StaticImage extends GameObject
 {
-    /* Each gameObject MUST have a constructor() and a render() method.        */
-    /* If the object animates, then it must also have an updateState() method. */
-
     constructor(image, x, y, width, height)
     {
         super(null); 

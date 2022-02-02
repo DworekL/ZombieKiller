@@ -1,23 +1,22 @@
-/* Author: Derek O Reilly, Dundalk Institute of Technology, Ireland. */
-
 const STATIC_TEXT_CENTRE = -1;
 
 class StaticText extends GameObject
 {
-    /* Each gameObject MUST have a constructor() and a render() method.        */
-    /* If the object animates, then it must also have an updateState() method. */
+ 
 
-    constructor(text, x, y, font, fontSize, colour)
+    constructor(text, x, y, font, fontSize, colour, text2="", beat=false, score=0)
     {
-        super(null); /* as this class extends from GameObject, you must always call super() */
+        super(null); 
 
-        /* These variables depend on the object */
         this.text = text;
         this.x = x;
         this.y = y;
         this.font = font;
         this.fontSize = fontSize;
         this.colour = colour;
+        this.text2 = text2;
+        this.beat = beat;
+        this.score = score;
 
         ctx.font = this.fontSize + "px " + this.font;
         this.width = ctx.measureText(this.text).width;
@@ -30,7 +29,18 @@ class StaticText extends GameObject
     render()
     {
         ctx.fillStyle = this.colour;
-        ctx.font = this.fontSize + "px " + this.font; // need to set the font each time, as it might have been changed by other gameObjects.
+        ctx.font = this.fontSize + "px " + this.font;
         ctx.fillText(this.text, this.x, this.y);
+
+        ctx.fillStyle = "yellow";
+        ctx.font = this.fontSize + "px " + this.font;
+        ctx.fillText(this.text2, this.x, this.y+50);
+
+        if(this.beat)
+        {
+        ctx.fillStyle = "yellow";
+        ctx.font = 30 + "px " + this.font;
+        ctx.fillText("NEW BEST SCORE !", this.x, this.y-50);
+        }
     }
 }

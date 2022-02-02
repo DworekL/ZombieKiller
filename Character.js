@@ -1,59 +1,56 @@
-/* Author: Derek O Reilly, Dundalk Institute of Technology, Ireland. */
 
 class Character extends GameObject
 {
-    /* Each gameObject MUST have a constructor() and a render() method.        */
-    /* If the object animates, then it must also have an updateState() method. */
-
-    constructor(tankImage, riverImage, speed, centreX, centreY, direction, startRow, startColumn, size) //obrazek,tlo,dzwiek,speed,pozycjaX,pozycjaY,kierunek,
+    constructor(charImage, obstacle, speed, centreX, centreY, direction, startRow, startColumn, size) //obrazek,tlo,speed,pozycjaX,pozycjaY,kierunek
     {
 
-        super(200 - speed); /* as this class extends from GameObject, you must always call super() */
+        super(200 - speed);
 
-        this.tankImage = tankImage;
-    
-        /* this.offscreenObstaclesCtx will be used for collision detection with the river */
+        this.charImage = charImage;
+
         this.offscreenObstacles = document.createElement('canvas');
         this.offscreenObstaclesCtx = this.offscreenObstacles.getContext('2d');
         this.offscreenObstacles.width = canvas.width;
         this.offscreenObstacles.height = canvas.height;
-        this.offscreenObstaclesCtx.drawImage(riverImage, 0, 0, canvas.width, canvas.height);
+        this.offscreenObstaclesCtx.drawImage(obstacle, 0, 0, canvas.width, canvas.height);
 
         this.centreX = centreX;
         this.centreY = centreY;
-        this.size = size;  // the width and height of the tank
+        this.size = size;  //wielkosc chara
         this.halfSize = this.size / 2;
 
-        this.NUMBER_OF_COLUMNS_IN_SPRITE_IMAGE = 1;//8 // the number of columns in the sprite image 
-        this.NUMBER_OF_ROWS_IN_SPRITE_IMAGE = 1;//4 // the number of rows in the sprite image	
-        this.NUMBER_OF_SPRITES = 1;//8 // the number of sprites in the sprite image
+        this.NUMBER_OF_COLUMNS_IN_SPRITE_IMAGE = 1;
+        this.NUMBER_OF_ROWS_IN_SPRITE_IMAGE = 1;	
+        this.NUMBER_OF_SPRITES = 1;
 
         this.START_ROW = startRow;
         this.START_COLUMN = startColumn;
 
-        this.currentSprite = 0; // the current sprite to be displayed from the sprite image  
-        this.row = this.START_ROW; // current row in sprite image
-        this.column = this.START_COLUMN; // current column in sprite image
-        this.SPRITE_INCREMENT = -1; // sub-images in the sprite image are ordered from bottom to top, right to left
+        this.currentSprite = 0; 
+        this.row = this.START_ROW; 
+        this.column = this.START_COLUMN; 
+        this.SPRITE_INCREMENT = -1; 
 
-        this.SPRITE_WIDTH = (this.tankImage.width / this.NUMBER_OF_COLUMNS_IN_SPRITE_IMAGE);
-        this.SPRITE_HEIGHT = (this.tankImage.height / this.NUMBER_OF_ROWS_IN_SPRITE_IMAGE);
+        this.SPRITE_WIDTH = (this.charImage.width / this.NUMBER_OF_COLUMNS_IN_SPRITE_IMAGE);
+        this.SPRITE_HEIGHT = (this.charImage.height / this.NUMBER_OF_ROWS_IN_SPRITE_IMAGE);
 
-        this.STEP_SIZE = 2; // the number of pixels to move forward
+        this.STEP_SIZE = 2; 
         this.setDirection(direction);
 
-        this.isMoving = false; // the tank is initially stopped
+        this.isMoving = false; 
 
         this.x = 150;
     }
 
     updateState()
     {
+        //jesli sie nie rusza to return
         if (!this.isMoving)
         {
             return;
         }
 
+        //zmiana spritow
         this.currentSprite++;
         this.column += this.SPRITE_INCREMENT;
         if (this.currentSprite >= this.NUMBER_OF_SPRITES )
@@ -72,7 +69,7 @@ class Character extends GameObject
         this.centreX += this.stepSizeX;
         this.centreY += this.stepSizeY;
 
-        /* if the tank goes off the canvas, then make it reappear at the opposite side of the canvas */
+        //gdy wyjdzie poza mape pojawi na drugim koncu mapy
         if ((this.centreX - this.halfSize) > canvas.width)
         {
             this.centreX = -this.halfSize;
@@ -98,7 +95,7 @@ class Character extends GameObject
         ctx.rotate(Math.radians(this.direction));
         ctx.translate(-this.centreX, -this.centreY);
 
-        ctx.drawImage(this.tankImage, this.column * this.SPRITE_WIDTH, this.row * this.SPRITE_HEIGHT, this.SPRITE_WIDTH, this.SPRITE_HEIGHT, this.centreX - parseInt(this.size / 2), this.centreY - parseInt(this.size / 2), this.size, this.size);
+        ctx.drawImage(this.charImage, this.column * this.SPRITE_WIDTH, this.row * this.SPRITE_HEIGHT, this.SPRITE_WIDTH, this.SPRITE_HEIGHT, this.centreX - parseInt(this.size / 2), this.centreY - parseInt(this.size / 2), this.size, this.size);
         ctx.restore();
     }
 
@@ -109,9 +106,9 @@ class Character extends GameObject
         this.start();
     }
 
-    pointIsInsideTank(x, y)
+    pointIsInsideChar(x, y)
     {
-        /* transform the shell into the enemy tank's coordinate system */
+        //przekształca pocisk w układ współrzędnych czołgu wroga
         let transformedX = x - this.centreX;
         let transformedY = y - this.centreY;
         x = transformedX * Math.cos(Math.radians((this.direction))) - transformedY * Math.sin(Math.radians(this.direction));
@@ -127,7 +124,7 @@ class Character extends GameObject
             {
                 if ((x - imageTopLeftX) > this.size)
                 {
-                    return false; // to the right of the tank image
+                    return false; //po prawo od chara
                 }
             }
 
@@ -135,30 +132,28 @@ class Character extends GameObject
             {
                 if ((y - imageTopLeftY) > this.size)
                 {
-                    return false; // below the tank image
+                    return false; //poniezej char
                 }
             }
         }
-        else // above or to the left of the tank image
+        else // powyzej lub po lewo
         {
             return false;
         }
-        return true; // inside tank image
+        return true; //w srodku chara
     }
 
-    collidedWithRiver()
+    collidedWithObstacle()
     {
-        /* test the front-left corner and the front-right corner of the tank for collision with the river */
-        /* we only need to test the front of the tank, as the tank can only move forward                                    */
-        if ((this.pointCollisionWithRiver(this.getFrontLeftCornerX(), this.getFrontLeftCornerY())) ||
-                (this.pointCollisionWithRiver(this.getFrontRightCornerX(), this.getFrontRightCornerY())))
+        if ((this.pointCollisionWithObstacle(this.getFrontLeftCornerX(), this.getFrontLeftCornerY())) ||
+                (this.pointCollisionWithObstacle(this.getFrontRightCornerX(), this.getFrontRightCornerY())))
         {
             return true;
         }
         return false;
     }
 
-    pointCollisionWithRiver(x, y)
+    pointCollisionWithObstacle(x, y)
     {
 
         let transformedX = x - this.centreX;
@@ -183,7 +178,7 @@ class Character extends GameObject
         this.centreY = Math.random() * (canvas.height - (this.size * 2)) + this.size;
         this.setDirection(Math.random() * 360);
 
-        // reset the tank sprite
+        //restowanie sprite'a
         this.currentSprite = 0;
         this.row = this.START_ROW;
         this.column = this.START_COLUMN;
@@ -206,7 +201,7 @@ class Character extends GameObject
 
     reverse(numberOfReverseSteps = 1)
     {
-        // move in reverse direction
+        // odwracanie
         for (let i = 0; i < numberOfReverseSteps; i++)
         {
             this.setX(this.getX() - this.getStepSizeX());

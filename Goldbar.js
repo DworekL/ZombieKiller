@@ -1,13 +1,9 @@
 class Goldbar extends GameObject
 {
-    /* Each gameObject MUST have a constructor() and a render() method.        */
-    /* If the object animates, then it must also have an updateState() method. */
-
     constructor(x, y, width, height, colour)
     {
-        super(null); /* as this class extends from GameObject, you must always call super() */
+        super(null); 
 
-        /* These variables depend on the object */
         this.x = x;
         this.y = y;
         this.width = width;
@@ -22,7 +18,7 @@ class Goldbar extends GameObject
         ctx.fillRect(this.x, this.y, this.width, this.height);
 
         ctx.fillStyle = "white";
-        ctx.font = 23 + "px " + "Brush Script MT"; // need to set the font each time, as it might have been changed by other gameObjects.
+        ctx.font = 23 + "px " + "Brush Script MT";
         ctx.fillText(this.width, 760, 637);
     }
 

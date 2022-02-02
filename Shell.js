@@ -1,13 +1,9 @@
-/* Author: Derek O Reilly, Dundalk Institute of Technology, Ireland. */
 
 class Shell extends GameObject
 {
-    /* Each gameObject MUST have a constructor() and a render() method.        */
-    /* If the object animates, then it must also have an updateState() method. */
-
     constructor(explosionImage, x, y, direction, ballImage)
     {
-        super(5); /* as this class extends from GameObject, you must always call super() */
+        super(5);
         
         this.explosionImage = explosionImage;
         this.x = x;
@@ -17,11 +13,8 @@ class Shell extends GameObject
         this.direction = direction;
         this.ballImage = ballImage;
      
-
-        /* define the maximum range of the shell */
-        /* the shell will explode here if it has not hit a target beforehand */
         this.shellRange = 500;
-        this.distanceShellTravelled = gameObjects[KILLER].getSize() / 2;  // the shell starts from the front of the tank's turret
+        this.distanceShellTravelled = gameObjects[KILLER].getSize() / 2;
     }
 
     updateState()

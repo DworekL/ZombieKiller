@@ -1,0 +1,125 @@
+
+#gameContainer
+{
+    width: 1520px;
+}
+
+#buttony
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+#gameCanvas
+{
+    /* the canvas styling usually does not change */
+    outline:1px solid rgb(228, 21, 21);
+    width:100%;
+    height: 650px;
+    z-index:-1;
+}
+
+#loadingMessage
+{
+    /* the loading message styling usually does not change */
+    position:absolute;
+    top:100px;
+    left:100px;
+    z-index:100;
+    font-size:50px;
+    font: "Brush Script MT";
+}
+
+#fire
+{
+    background-color: rgba(255, 166, 0, 0.705);
+    color: black;
+    font-size: 1.5rem;
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    font-family: "Brush Script MT";
+    z-index: 1;
+}
+
+#left_btn
+{
+    background-color: rgba(0, 0, 255, 0.699);
+    color: black;
+    font-size: 2rem;
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    font-family: "Brush Script MT";
+    z-index: 1;
+}
+
+#right_btn
+{
+    background-color: rgba(0, 0, 255, 0.719);
+    color: black;
+    font-size: 2rem;
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    font-family: "Brush Script MT";
+    z-index: 1;
+}
+
+#reset
+{
+    background-color: rgba(0, 0, 255, 0.699);
+    color: black;
+    font-size: 1.5rem;
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    font-family: "Brush Script MT";
+    z-index: 1;
+}
+
+#heal
+{
+    background-color: rgba(255, 0, 0, 0.699);
+    color: black;
+    font-size: 1.2rem;
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    font-family: "Brush Script MT";
+    z-index: 1;
+}
+
+#speed
+{
+    background-color: rgba(255, 255, 0, 0.705);
+    color: black;
+    font-size: 1.2rem;
+    border: 1px solid black;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    font-family: "Brush Script MT";
+    z-index: 1;
+}
+
+#buttony
+{
+    z-index: 1;
+    margin-top: -85px;
+}
+
+#left
+{
+    z-index: 1;
+}
+
+#right
+{
+    z-index: 1;
+}

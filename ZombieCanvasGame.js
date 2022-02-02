@@ -1,6 +1,3 @@
-/* Author: Derek O Reilly, Dundalk Institute of Technology, Ireland.       */
-/* A CanvasGame that implements collision detection.                       */
-
 
 class ZombieCanvasGame extends CanvasGame
 {
@@ -16,12 +13,15 @@ class ZombieCanvasGame extends CanvasGame
         //gdy nasz killer zderzy sie z zombie
         for (let i = 0; i < enemyZombies.length; i++)
         {
-            if ((enemyZombies[i].pointIsInsideTank(gameObjects[KILLER].getFrontLeftCornerX(), gameObjects[KILLER].getFrontLeftCornerY())) ||
-                    (enemyZombies[i].pointIsInsideTank(gameObjects[KILLER].getFrontRightCornerX(), gameObjects[KILLER].getFrontRightCornerY())))
+            if ((enemyZombies[i].pointIsInsideChar(gameObjects[KILLER].getFrontLeftCornerX(), gameObjects[KILLER].getFrontLeftCornerY())) ||
+                    (enemyZombies[i].pointIsInsideChar(gameObjects[KILLER].getFrontRightCornerX(), gameObjects[KILLER].getFrontRightCornerY())))
             {
                 enemyZombies[i].reverse(5);
                 enemyZombies[i].setDirection(enemyZombies[i].getDirection() + 10); // turn away from the river, so that the tank does not get stuck in one place
-            
+                if (enemyZombies[i].isDisplayed())
+                {
+                gameObjects[HEALTH].hit(5);
+                }
             }
         }
 
@@ -30,8 +30,8 @@ class ZombieCanvasGame extends CanvasGame
         for (let i = 0; i < enemyZombies.length; i++)
         {
             //gdy nasz killer zderzy sie z zombie
-            if ((gameObjects[KILLER].pointIsInsideTank(enemyZombies[i].getFrontLeftCornerX(), enemyZombies[i].getFrontLeftCornerY())) ||
-                    (gameObjects[KILLER].pointIsInsideTank(enemyZombies[i].getFrontRightCornerX(), enemyZombies[i].getFrontRightCornerY())))
+            if ((gameObjects[KILLER].pointIsInsideChar(enemyZombies[i].getFrontLeftCornerX(), enemyZombies[i].getFrontLeftCornerY())) ||
+                    (gameObjects[KILLER].pointIsInsideChar(enemyZombies[i].getFrontRightCornerX(), enemyZombies[i].getFrontRightCornerY())))
             {
                 enemyZombies[i].reverse(5);
                 enemyZombies[i].setDirection(enemyZombies[i].getDirection() + 10); // turn away from the river, so that the tank does not get stuck in one place
@@ -42,8 +42,8 @@ class ZombieCanvasGame extends CanvasGame
             {
                 if (i !== j)
                 {
-                    if ((enemyZombies[i].pointIsInsideTank(enemyZombies[j].getFrontLeftCornerX(), enemyZombies[j].getFrontLeftCornerY())) ||
-                            (enemyZombies[i].pointIsInsideTank(enemyZombies[j].getFrontRightCornerX(), enemyZombies[j].getFrontRightCornerY())))
+                    if ((enemyZombies[i].pointIsInsideChar(enemyZombies[j].getFrontLeftCornerX(), enemyZombies[j].getFrontLeftCornerY())) ||
+                            (enemyZombies[i].pointIsInsideChar(enemyZombies[j].getFrontRightCornerX(), enemyZombies[j].getFrontRightCornerY())))
                     {
                         enemyZombies[i].reverse(3);
                         enemyZombies[i].setDirection(enemyZombies[i].getDirection() + 10); // turn away from the river, so that the tank does not get stuck in one place
@@ -54,7 +54,7 @@ class ZombieCanvasGame extends CanvasGame
 
 
         //gdy killer z obiektem
-        if (gameObjects[KILLER].collidedWithRiver())
+        if (gameObjects[KILLER].collidedWithObstacle())
         {
             gameObjects[KILLER].reverse();
         }
@@ -62,7 +62,7 @@ class ZombieCanvasGame extends CanvasGame
         //gdy zombie z obiektem
         for (let i = 0; i < enemyZombies.length; i++)
         {
-            if (enemyZombies[i].collidedWithRiver())
+            if (enemyZombies[i].collidedWithObstacle())
             {
                 enemyZombies[i].reverse();
                 enemyZombies[i].setDirection(enemyZombies[i].getDirection() + 10); // turn away from the river, so that the tank does not get stuck in one place
@@ -78,7 +78,7 @@ class ZombieCanvasGame extends CanvasGame
         {
             if (gameObjects[SHELL].isFiring())
             {
-                if ((enemyZombies[i].isDisplayed()) && (enemyZombies[i].pointIsInsideTank(gameObjects[SHELL].getX(), gameObjects[SHELL].getY())))
+                if ((enemyZombies[i].isDisplayed()) && (enemyZombies[i].pointIsInsideChar(gameObjects[SHELL].getX(), gameObjects[SHELL].getY())))
                 {
                     enemyZombies[i].stopAndHide();
                     gameObjects[EXPLOSION] = new Explosion(explosionImage, enemyZombies[i].getX(), enemyZombies[i].getY(), 100);
@@ -88,22 +88,6 @@ class ZombieCanvasGame extends CanvasGame
                     gameObjects[GOLDBAR].addPoints();
 
                     this.numberOfZombiesKilled++;
-                    if (this.numberOfZombiesKilled === numberOfZombies)
-                    {
-                        /* Player has won                                                                                             */
-                        /* Have a two second delay to show the last enemy tank blowing up beofore displaying the 'Game Over!' message */
-                        setInterval(function ()
-                        {
-                            for (let j = 0; j < gameObjects.length; j++) /* stop all gameObjects from animating */
-                            {
-                                gameObjects[j].stopAndHide();
-                            }
-                            gameObjects[KILLER].stopMoving(); // turn off tank moving sound
-                            gameObjects[BACKGROUND].start();
-                            gameObjects[WIN_MESSAGE] = new StaticText("Game Over!", 5, 270, "Times Roman", 100, "red");
-                            gameObjects[WIN_MESSAGE].start(); /* render win message */
-                        }, 2000);
-                    }
                 }
             }
         }
@@ -113,16 +97,15 @@ class ZombieCanvasGame extends CanvasGame
         {
             if (gameObjects[i].isFiringZombie())
             {
-                if ((gameObjects[KILLER].isDisplayed()) && (gameObjects[KILLER].pointIsInsideTank(gameObjects[i].getX(), gameObjects[i].getY())))
+                if ((gameObjects[KILLER].isDisplayed()) && (gameObjects[KILLER].pointIsInsideChar(gameObjects[i].getX(), gameObjects[i].getY())))
                 {
-                    console.log("DOSTALES HITA !!");
+                    console.log("OBERWALES !!");
                     gameObjects[i].stopAndHide();
-                    gameObjects[HEALTH].hit();
+                    gameObjects[HEALTH].hit(100);
                 }
             }
         }
     
-
 
     }
 

@@ -44,21 +44,16 @@ const GOLDBAR = 9; // pasek z mana
 let enemyZombies = [];
 let numberOfZombies = 3;
 let boolek = false;
+
+//zmienna do zwiekszania poziomu rozgrywki
+let startLevel = 6000; //poczatkowy czas respienia sie zoombie
+let level = 50; //liczba czasu odejmowane co dany czas
+let timeToSetLevel = 10000; //czas jaki ma minac aby zmiejszyc czas respienia (10 SEC)
 /******************* END OF Declare game specific data and functions *****************/
 
 
 function playGame()
 {
-
-    /* We need to initialise the game objects outside of the Game class */
-    /* This function does this initialisation.                          */
-    /* This function will:                                               */
-    /* 1. create the various game game gameObjects                   */
-    /* 2. store the game gameObjects in an array                     */
-    /* 3. create a new Game to display the game gameObjects          */
-    /* 4. start the Game                                                */
-    /* Create the various gameObjects for this game. */
-    /* This is game specific code. It will be different for each game, as each game will have it own gameObjects */
 
     //tworzenie tla oraz chara
     gameObjects[BACKGROUND] = new StaticImage(fieldImage, 0, 0, canvas.width, canvas.height);
@@ -80,23 +75,10 @@ function playGame()
         do
         {
             enemyZombies[i] = new Zombie(shooter33, ice, Math.random() * (canvas.width - 25) + 25, Math.random() * (canvas.height - 25) + 25, Math.random() * 360);
-        }while (enemyZombies[i].collidedWithRiver()) // upewnienie ze nie stana na przeszkodzie
+        }while (enemyZombies[i].collidedWithObstacle()) // upewnienie ze nie stana na przeszkodzie
         enemyZombies[i].start();
         enemyZombies[i].startMoving();
     }
-
-    //tworzenie zombie co 5 sekund
-    setInterval(function() {
-        do
-        {
-            enemyZombies[numberOfZombies] = new Zombie(shooter33, ice, Math.random() * (canvas.width - 25) + 25, Math.random() * (canvas.height - 25) + 25, Math.random() * 360);
-            gameObjects[numberOfZombies+10] = new Bullet(explosionImage, enemyZombies[numberOfZombies].getX(), enemyZombies[numberOfZombies].getY(), enemyZombies[numberOfZombies].direction, fireball2);
-        }while (enemyZombies[numberOfZombies].collidedWithRiver()) // upewnienie ze nie stana na przeszkodzie
-        enemyZombies[numberOfZombies].start();
-        enemyZombies[numberOfZombies].startMoving(); 
-        numberOfZombies++;      
-        console.log(numberOfZombies)    
-    }, 5000);
 
     //strzelanie przez zombie kamieniami co 2 sekundy
     setInterval(function() { 
@@ -107,8 +89,9 @@ function playGame()
             gameObjects[i] = new Bullet(explosionImage, enemyZombies[i-10].getX(), enemyZombies[i-10].getY(), enemyZombies[i-10].direction, fireball2);
             gameObjects[i].start();
 
+            //odracanie sie zombie
             enemyZombies[i-10].reverse(3); 
-            enemyZombies[i-10].setDirection(enemyZombies[i-10].getDirection() + 80);
+            enemyZombies[i-10].setDirection(enemyZombies[i-10].getDirection() + Math.random() * 360);
             }
         }              
     }, 2000);
@@ -120,7 +103,51 @@ function playGame()
 
     /* Always play the game */
     game.start();
- 
+
+    document.getElementById("reset").style.display = "none";
+
+    //zmiana levela
+    setInterval(function() {
+        if (startLevel > 2000)
+        {
+        startLevel = startLevel - level;
+        }
+        else 
+        {
+
+        }
+        console.log("zmiana levela : "+startLevel)
+    }, timeToSetLevel);
+
+    // //tworzenie zombie co 6 sekund
+    // setInterval(function() {
+    // do
+    // {
+    //     enemyZombies[numberOfZombies] = new Zombie(shooter33, ice, Math.random() * (canvas.width - 25) + 25, Math.random() * (canvas.height - 25) + 25, Math.random() * 360);
+    //     gameObjects[numberOfZombies+10] = new Bullet(explosionImage, enemyZombies[numberOfZombies].getX(), enemyZombies[numberOfZombies].getY(), enemyZombies[numberOfZombies].direction, fireball2);
+    // }while (enemyZombies[numberOfZombies].collidedWithObstacle()) // upewnienie ze nie stana na przeszkodzie
+    // enemyZombies[numberOfZombies].start();
+    // enemyZombies[numberOfZombies].startMoving(); 
+    // numberOfZombies++;      
+    // console.log("STWORZONO");
+
+    // }, startLevel);
+
+    var myFunction = function() {
+        do
+        {
+            enemyZombies[numberOfZombies] = new Zombie(shooter33, ice, Math.random() * (canvas.width - 25) + 25, Math.random() * (canvas.height - 25) + 25, Math.random() * 360);
+            gameObjects[numberOfZombies+10] = new Bullet(explosionImage, enemyZombies[numberOfZombies].getX(), enemyZombies[numberOfZombies].getY(), enemyZombies[numberOfZombies].direction, fireball2);
+        }while (enemyZombies[numberOfZombies].collidedWithObstacle()) // upewnienie ze nie stana na przeszkodzie
+
+        enemyZombies[numberOfZombies].start();
+        enemyZombies[numberOfZombies].startMoving(); 
+        numberOfZombies++;      
+        console.log("STWORZONO + TIMER = "+ startLevel);
+        setTimeout(myFunction, startLevel);
+    }
+    setTimeout(myFunction, startLevel);
+
     //let counter = 20;
 
     // gameObjects[SCORE] = new StaticText("0", 5, 270, "Times Roman", 100, "red");
@@ -137,11 +164,63 @@ function playGame()
         gameObjects[i] = new Bullet(explosionImage, enemyZombies[i-10].getX(), enemyZombies[i-10].getY(), enemyZombies[i-10].direction, fireball2);
     }  
 
+    const ANGLE_STEP_SIZE = 10;
+
+    document.getElementById("left_btn").addEventListener('mousedown', function (e){
+        console.log("lol");
+		gameObjects[KILLER].setDirection(gameObjects[KILLER].getDirection() - ANGLE_STEP_SIZE);
+	});
+	document.getElementById("right_btn").addEventListener('mousedown', function (e){
+		gameObjects[KILLER].setDirection(gameObjects[KILLER].getDirection() + ANGLE_STEP_SIZE);
+	});
+
+    document.getElementById("reset").addEventListener('mousedown', function (e){
+		window.location.reload(true);
+	});
+
+    document.getElementById("heal").addEventListener('mousedown', function (e){
+        if ( !(gameObjects[HEALTH].getHealth() === 400) )
+        {
+            if (gameObjects[GOLDBAR].getPoints() > 0)
+            {
+                gameObjects[HEALTH].addHealth();
+                gameObjects[GOLDBAR].deletePoints();
+            }
+        }
+	});
+
+    document.getElementById("speed").addEventListener('mousedown', function (e){
+		if (!boolek)
+            {
+            if (gameObjects[GOLDBAR].getPoints() > 0)
+                {
+                    console.log("KLIK");
+                    gameObjects[KILLER].setSpeed(20);
+                    boolek = true;
+                    gameObjects[GOLDBAR].deletePoints();
+                    setTimeout(()=>{
+                        gameObjects[KILLER].setSpeed(50);
+                        boolek = false;
+                    },1000)
+                }
+            }
+	});
+
+    document.getElementById("fire").addEventListener('mousedown', function (e){
+		if(gameObjects[SHELL] === undefined || !gameObjects[SHELL].isFiring())
+            {
+                gameObjects[FIRE_SHELL] = new FireShellAnimation(tankImage, gameObjects[KILLER].getX(), gameObjects[KILLER].getY(), gameObjects[KILLER].getDirection());
+                gameObjects[FIRE_SHELL].start();
+
+                gameObjects[SHELL] = new Shell(explosionImage, gameObjects[KILLER].getX(), gameObjects[KILLER].getY(), gameObjects[KILLER].direction, ballImage);
+                gameObjects[SHELL].start();
+            }
+
+	});
+
     /* If they are needed, then include any game-specific mouse and keyboard listners */
     document.addEventListener("keydown", function (e)
     {
-        const ANGLE_STEP_SIZE = 10;
-
         if (e.keyCode === 37)  // left
         {
             gameObjects[KILLER].setDirection(gameObjects[KILLER].getDirection() - ANGLE_STEP_SIZE);
